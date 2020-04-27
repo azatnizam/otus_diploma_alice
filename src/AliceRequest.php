@@ -40,7 +40,7 @@ class AliceRequest
         return false;
     }
 
-    protected function getCommand()
+    public function getCommand()
     {
         return $this->postBody->request->command;
     }

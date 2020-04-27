@@ -1,30 +1,28 @@
 <?php
 namespace Azatnizam;
 
-use Azatnizam\ISkill;
+use Azatnizam\ISkill,
+    Azatnizam\BaseSkill;
 
-class MovieSkill implements ISkill
+class MovieSkill extends BaseSkill
 {
-    protected $response;
+    protected $step;
 
-    public function __construct()
+    protected $message;
+
+    public function getStep(): int
     {
-        $this->response = new \stdClass();
-        $this->response->buttons = [];
+
+        return 1;
     }
 
-    public function getResponse()
+    public function getStepMessage(): string
     {
-        return json_encode($this->response);
+        return '';
     }
 
-    public function setButton($value)
+    public function renderStep()
     {
-        $button = new \stdClass();
-        $button->title = $value;
-
-        $this->response->buttons[] = $button;
-
-        return $this;
+        print $this->getSkillResponse();
     }
 }
