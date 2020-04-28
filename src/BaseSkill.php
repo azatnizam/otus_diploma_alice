@@ -48,14 +48,14 @@ class BaseSkill implements ISkill
 
     public function setText($value)
     {
-        $this->skill_response->text = $value;
+        $this->skill_response->response->text = $value;
 
         return $this;
     }
 
     public function setTts($value)
     {
-        $this->skill_response->tts = $value;
+        $this->skill_response->response->tts = $value;
 
         return $this;
     }
@@ -69,7 +69,7 @@ class BaseSkill implements ISkill
 
     public function setEndSession()
     {
-        $this->skill_response->end_session = true;
+        $this->skill_response->response->end_session = true;
 
         return $this;
     }
