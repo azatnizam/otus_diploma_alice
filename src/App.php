@@ -3,6 +3,7 @@ namespace Azatnizam;
 
 use \Azatnizam\AliceRequest;
 use \Azatnizam\MovieSkill;
+use \Symfony\Component\Yaml\Yaml;
 
 class App
 {
@@ -16,15 +17,25 @@ class App
             return;
         }
 
-        $skill->setButton('Help');
+        // localization
+        $mess = Yaml::parseFile(__DIR__ . '/messages.yml');
+
+        $skill->setButton($mess['button.help']);
 
         if ( !is_null( $request->getButtonValue() ) ) {
+
             $skill
-                ->setButton('Clear my history')
-                ->setText('Ok. Type film name or part of the name');
+                ->setButton($mess['button.clear'])
+                ->setText($mess['text.addfilm']);
+
         } elseif ( $request->getCommand() ) {
-            $skill
-                ->setText( 'You command: ' . $request->getCommand() );
+
+            $skill->setText( 'You command: ' . $request->getCommand() );
+
+        } else {
+
+            $skill->setText($mess['text.welcome']);
+
         }
 
         $skill->renderStep();
