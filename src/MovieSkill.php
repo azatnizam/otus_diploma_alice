@@ -37,11 +37,8 @@ class MovieSkill extends BaseSkill
 
             case $this->mess['button.getresult']:
                 /** Emulator for recommendations */
-                $this
-                    ->setButton('Film https://www.kinopoisk.ru/film/326/')
-                    ->setButton('Film2 https://www.kinopoisk.ru/film/435/')
-                    ->setButton('Film3 https://www.kinopoisk.ru/film/326/')
-                    ->setText($this->mess['text.recommendation']);
+                $text = $this->mess['text.recommendation'] . "\n\nFilm https://www.kinopoisk.ru/film/326/ \nFilm2 https://www.kinopoisk.ru/film/435/\nFilm3 https://www.kinopoisk.ru/film/326/";
+                $this->setText($text);
                 break;
 
             default:
