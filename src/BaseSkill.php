@@ -40,6 +40,7 @@ class BaseSkill implements ISkill
     {
         $button = new \stdClass();
         $button->title = $value;
+        $button->hide = true;
 
         $this->skill_response->response->buttons[] = $button;
 
