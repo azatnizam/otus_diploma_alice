@@ -22,13 +22,9 @@ class AliceRequest
         return (string) $this->postBody->session->user->user_id;
     }
 
-    public function getButtonValue()
+    public function getButtonValue(): string
     {
-        if ( $this->isButtonPressed() ) {
-            return $this->getCommand();
-        }
-
-        return null;
+        return (string) $this->postBody->request->payload->value;
     }
 
     public function getRequest()
@@ -40,12 +36,12 @@ class AliceRequest
         return false;
     }
 
-    public function getCommand()
+    public function getCommand(): string
     {
-        return $this->postBody->request->command;
+        return (string) $this->postBody->request->command;
     }
 
-    protected function isButtonPressed(): bool
+    public function isButtonPressed(): bool
     {
         if ($this->postBody->request->type == self::BUTTON_TYPE) {
             return true;

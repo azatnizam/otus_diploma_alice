@@ -35,6 +35,15 @@ class MovieSkill extends BaseSkill
                     ->setText($this->mess['text.help']);
                 break;
 
+            case $this->mess['button.getresult']:
+                /** Emulator for recommendations */
+                $this
+                    ->setButton('Film https://www.kinopoisk.ru/film/326/')
+                    ->setButton('Film2 https://www.kinopoisk.ru/film/435/')
+                    ->setButton('Film3 https://www.kinopoisk.ru/film/326/')
+                    ->setText($this->mess['text.recommendation']);
+                break;
+
             default:
                 /** Emulator for film add */
                 $this

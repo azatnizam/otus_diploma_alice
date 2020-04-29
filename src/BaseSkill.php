@@ -39,8 +39,11 @@ class BaseSkill implements ISkill
     public function setButton($value)
     {
         $button = new \stdClass();
+        $button->payload = new \stdClass();
+
         $button->title = $value;
         $button->hide = true;
+        $button->payload->value = $value;
 
         $this->skill_response->response->buttons[] = $button;
 
