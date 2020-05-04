@@ -1,15 +1,18 @@
 <?php
 namespace Azatnizam;
 
-use Azatnizam\ISkill,
-    Azatnizam\BaseSkill,
-    \Symfony\Component\Yaml\Yaml;
+use Azatnizam\ISkill;
+use Azatnizam\BaseSkill;
+use Symfony\Component\Yaml\Yaml;
+use GuzzleHttp\Client as HttpClient;
 
 class MovieSkill extends BaseSkill
 {
-    protected $step;
+    private $step;
 
-    protected $mess;
+    private $mess;
+
+    private const SECRET = '14a355e01638761caa047b29b68efb6f';
 
     public function __construct()
     {
@@ -48,7 +51,7 @@ class MovieSkill extends BaseSkill
                 $this
                     ->setButton($this->mess['button.getresult'])
                     ->setButton($this->mess['button.help'])
-                    ->setText('Film has been successfully added');
+                    ->setText($this->mess['text.filmadded']);
                 break;
 
         }
@@ -57,12 +60,25 @@ class MovieSkill extends BaseSkill
 
     public function processCommand(string $command)
     {
-        /** Emulator for film list */
-        $this
-            ->setButton('Film #1')
-            ->setButton('Film #2')
-            ->setButton('Film #3')
-            ->setText($this->mess['text.choicefilm']);
+        // TODO: move base_uri to config
+        $http = new HttpClient(['base_uri' => 'https://lyagusha.com']);
+
+        $expires = time();
+        $sign = hash_hmac('sha256', $expires, self::SECRET);
+        $url = '/movies/list/' . $command . '?' . http_build_query(['expires' => $expires, 'sign' => $sign]);
+
+        $apiResponse = json_decode($http->get($url)->getBody());
+        if ($apiResponse->status === 'true') {
+            foreach ($apiResponse->movies as $movie) {
+                $this->setButton($movie->title);
+            }
+
+            $this->setText($this->mess['text.choicefilm']);
+        } else {
+            $this
+                ->setButton($this->mess['button.help'])
+                ->setText($this->mess['text.error.getlist']);
+        }
     }
 
     public function renderStep()
