@@ -68,7 +68,8 @@ class MovieSkill extends BaseSkill
         $url = '/movies/list/' . $command . '?' . http_build_query(['expires' => $expires, 'sign' => $sign]);
 
         $apiResponse = json_decode($http->get($url)->getBody());
-        if ($apiResponse->status === 'true') {
+
+        if ($apiResponse->status === true) {
             foreach ($apiResponse->movies as $movie) {
                 $this->setButton($movie->title);
             }
