@@ -10,7 +10,8 @@ class App
     public function run()
     {
         $request = new AliceRequest();
-        $skill = new MovieSkill();
+        $user = new User($request->getUserId());
+        $skill = new MovieSkill($user);
 
         if ( !$request->getRequest() ) {
             header('HTTP/1.1 415 Unsupported request data');

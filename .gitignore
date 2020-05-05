@@ -1,2 +1,4 @@
 .idea
 vendor
+users.cache/*
+!users.cache/.gitkeep

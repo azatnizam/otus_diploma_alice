@@ -8,18 +8,18 @@ use GuzzleHttp\Client as HttpClient;
 
 class MovieSkill extends BaseSkill
 {
-    private $step;
-
-    private $mess;
-
     private const SECRET = '14a355e01638761caa047b29b68efb6f';
+    private const FAV_MOVIES_COUNT = 5;
+    private $mess;
+    private $user;
 
-    public function __construct()
+    public function __construct(User $user)
     {
         parent::__construct();
 
         // localization
-        $this->mess = Yaml::parseFile(__DIR__ . '/lang/skill.yml');
+        $this->mess = Yaml::parseFile(dirname(__DIR__) . '/lang/skill.yml');
+        $this->user = $user;
     }
 
 
@@ -39,14 +39,31 @@ class MovieSkill extends BaseSkill
                 break;
 
             case $this->mess['button.getresult']:
-                /** Emulator for recommendations */
-                $text = $this->mess['text.recommendation'] . "\n\nFilm https://www.kinopoisk.ru/film/326/ \nFilm2 https://www.kinopoisk.ru/film/435/\nFilm3 https://www.kinopoisk.ru/film/326/";
-                $this
-                    ->setButton($this->mess['button.help'])
-                    ->setText($text);
+                if ($this->user->getMoviesCount() >= self::FAV_MOVIES_COUNT) {
+                    /** Emulator for recommendations */
+                    $text = $this->mess['text.recommendation'] . "\n\nFilm https://www.kinopoisk.ru/film/326/ \nFilm2 https://www.kinopoisk.ru/film/435/\nFilm3 https://www.kinopoisk.ru/film/326/";
+                    $this
+                        ->setButton($this->mess['button.help'])
+                        ->setText($text);
+                } else {
+                    $needFilmsCount = self::FAV_MOVIES_COUNT - $this->user->getMoviesCount();
+
+                    // Message for one or multiple counter
+                    if ($needFilmsCount === 1) {
+                        $text = sprintf($this->mess['text.addmorefilm.1'], $needFilmsCount);
+                    } else {
+                        $text = sprintf($this->mess['text.addmorefilm.2'], $needFilmsCount);
+                    }
+
+                    $this
+                        ->setButton($this->mess['button.help'])
+                        ->setText($text);
+                }
+
                 break;
 
             default:
+                $this->user->incrMoviesCount();
                 /** Emulator for film add */
                 $this
                     ->setButton($this->mess['button.getresult'])
