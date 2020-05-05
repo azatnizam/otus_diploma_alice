@@ -49,7 +49,9 @@ class MovieSkill extends BaseSkill
                     $needFilmsCount = self::FAV_MOVIES_COUNT - $this->user->getMoviesCount();
 
                     // Message for one or multiple counter
-                    if ($needFilmsCount === 1) {
+                    if ($needFilmsCount === self::FAV_MOVIES_COUNT) {
+                        $text = $this->mess['text.addmorefilm.3'];
+                    } elseif ($needFilmsCount === 1) {
                         $text = sprintf($this->mess['text.addmorefilm.1'], $needFilmsCount);
                     } else {
                         $text = sprintf($this->mess['text.addmorefilm.2'], $needFilmsCount);
@@ -91,7 +93,11 @@ class MovieSkill extends BaseSkill
                 $this->setButton($movie->title);
             }
 
-            $this->setText($this->mess['text.choicefilm']);
+            if ($apiResponse->movies > 0) {
+                $this->setText($this->mess['text.choicefilm']);
+            } else {
+                $this->setText($this->mess['text.filmnotfound']);
+            }
         } else {
             $this
                 ->setButton($this->mess['button.help'])
