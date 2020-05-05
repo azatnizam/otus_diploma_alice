@@ -17,29 +17,19 @@ class App
             return;
         }
 
-        // localization
-//        $mess = Yaml::parseFile(__DIR__ . '/lang/app.yml');
         $mess = $skill->getSkillMessages();
 
-
         if ( $request->isButtonPressed() ) {
-
             $skill->processButton( $request->getButtonValue() );
-
         } elseif ( $request->getCommand() ) {
-
             $skill->processCommand( $request->getCommand() );
-
         } else {
-
             $skill
                 ->setButton($mess['button.help'])
                 ->setButton($mess['button.getresult'])
                 ->setText($mess['text.welcome']);
-
         }
 
         $skill->renderStep();
-
     }
 }
