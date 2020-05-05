@@ -41,7 +41,7 @@ class MovieSkill extends BaseSkill
             case $this->mess['button.getresult']:
                 if ($this->user->getMoviesCount() >= self::FAV_MOVIES_COUNT) {
                     /** Emulator for recommendations */
-                    $text = $this->mess['text.recommendation'] . "\n\nFilm https://www.kinopoisk.ru/film/326/ \nFilm2 https://www.kinopoisk.ru/film/435/\nFilm3 https://www.kinopoisk.ru/film/326/";
+                    $text = $this->mess['text.recommendation'] . "\n\nFilm\nFilm2\nFilm3";
                     $this
                         ->setButton($this->mess['button.help'])
                         ->setText($text);
@@ -52,7 +52,7 @@ class MovieSkill extends BaseSkill
                     if ($needFilmsCount === self::FAV_MOVIES_COUNT) {
                         $text = $this->mess['text.addmorefilm.3'];
                     } elseif ($needFilmsCount === 1) {
-                        $text = sprintf($this->mess['text.addmorefilm.1'], $needFilmsCount);
+                        $text = $this->mess['text.addmorefilm.1'];
                     } else {
                         $text = sprintf($this->mess['text.addmorefilm.2'], $needFilmsCount);
                     }
