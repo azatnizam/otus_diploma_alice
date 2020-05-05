@@ -93,7 +93,7 @@ class MovieSkill extends BaseSkill
                 $this->setButton($movie->title);
             }
 
-            if ($apiResponse->movies > 0) {
+            if (count($apiResponse->movies) > 0) {
                 $this->setText($this->mess['text.choicefilm']);
             } else {
                 $this->setText($this->mess['text.filmnotfound']);
