@@ -11,7 +11,8 @@ final class ApiClient
     private const SECRET = '14a355e01638761caa047b29b68efb6f';
     private const BASE_URI = 'https://lyagusha.com';
     private const LIST_URL = '/movies/list/';
-    private const POST_PREFERENCE = '/movies/preference';
+    private const POST_PREFERENCE_URL = '/movies/preference';
+    private const RECOMMENDATIONS_URL = '/movies/user/%s/recommendations';
     private $httpClient;
     private $status;
     private $url;
@@ -67,7 +68,7 @@ final class ApiClient
         $this->status = false;
         $list = new Vector();
 
-        $this->prepare(self::POST_PREFERENCE);
+        $this->prepare(self::POST_PREFERENCE_URL);
         $postBody = new \stdClass();
         $postBody->user_id = $user->getId();
         $postBody->movies = [$movie->getId()];
@@ -77,6 +78,31 @@ final class ApiClient
         foreach ($apiResponse->movies as $responseMovie) {
             $movie = new Movie();
             $movie->setId($responseMovie);
+
+            $list->push($movie);
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param \Azatnizam\User $user
+     * @return Vector list of recommended films
+     */
+    public function getRecommendations(User $user): Vector
+    {
+        $this->status = false;
+        $list = new Vector();
+
+        $this->prepare(sprintf(self::RECOMMENDATIONS_URL, $user->getId()));
+        $apiResponse = json_decode($this->httpClient->get($this->url)->getBody());
+
+        $this->status = $apiResponse->status;
+        foreach ($apiResponse->recommendations as $responseMovie) {
+            $movie = new Movie();
+            $movie
+                ->setId($responseMovie->id)
+                ->setTitle($responseMovie->title);
 
             $list->push($movie);
         }

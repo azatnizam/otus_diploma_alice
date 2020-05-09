@@ -7,8 +7,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class MovieSkill extends BaseSkill
 {
-    // TODO: delete from this file
-    private const SECRET = '14a355e01638761caa047b29b68efb6f';
     private const FAV_MOVIES_COUNT = 5;
     private $mess;
     private $user;
@@ -44,12 +42,31 @@ class MovieSkill extends BaseSkill
 
             case $this->mess['button.getresult']:
                 if ($this->user->getMoviesCount() >= self::FAV_MOVIES_COUNT) {
+                    $api = new ApiClient();
+                    $recommendations = $api->getRecommendations($this->user);
 
-                    /** Emulator for recommendations */
-//                    $text = $this->mess['text.recommendation'] . "\n\nFilm\nFilm2\nFilm3";
-//                    $this
-//                        ->setButton($this->mess['button.help'])
-//                        ->setText($text);
+                    $this
+                        ->setButton(
+                            (new Button())
+                                ->setTitle($this->mess['button.getresult'])
+                                ->setValue($this->mess['button.getresult'])
+                        )
+                        ->setButton(
+                            (new Button())
+                                ->setTitle($this->mess['button.help'])
+                                ->setValue($this->mess['button.help'])
+                        );
+
+                    if ($api->getStatus() === true) {
+                        $text = $this->mess['text.recommendation'];
+                        foreach ($recommendations as $movie) {
+                            $text .= "\n". $movie->getTitle();
+                        }
+
+                        $this->setText($text);
+                    } else {
+                        $this->setText($this->mess['text.error.recommendations']);
+                    }
                 } else {
                     $needFilmsCount = self::FAV_MOVIES_COUNT - $this->user->getMoviesCount();
 
