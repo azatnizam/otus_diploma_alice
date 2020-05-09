@@ -31,9 +31,22 @@ final class User
         return (int) $this->moviesCount;
     }
 
+    /**
+     * Local storage increment
+     */
     public function incrMoviesCount()
     {
         $this->moviesCount++;
+        file_put_contents($this->cacheFile, (string) $this->moviesCount);
+    }
+
+    /**
+     * @param int $counter
+     * Use to synchronise with server counter
+     */
+    public function setMoviesCount(int $counter)
+    {
+        $this->moviesCount = $counter;
         file_put_contents($this->cacheFile, (string) $this->moviesCount);
     }
 }

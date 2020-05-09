@@ -1,6 +1,8 @@
 <?php
 namespace Azatnizam;
 
+use Azatnizam\Button;
+
 /**
  * Interface ISkill
  * Base field for Alice protocol
@@ -9,7 +11,7 @@ interface ISkill
 {
     public function getSkillResponse();
 
-    public function setButton($value);
+    public function setButton(Button $button);
 
     public function setText($value);
 

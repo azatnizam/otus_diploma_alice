@@ -1,6 +1,8 @@
 <?php
 namespace Azatnizam;
 
+use Azatnizam\Button;
+
 class AliceRequest
 {
     protected $postBody;
@@ -22,9 +24,24 @@ class AliceRequest
         return (string) $this->postBody->session->user->user_id;
     }
 
+    /**
+     * deprecated
+     * @return string
+     */
     public function getButtonValue(): string
     {
         return (string) $this->postBody->request->payload->value;
+    }
+
+    /**
+     * @return \Azatnizam\Button
+     */
+    public function getButton(): Button
+    {
+        $button = new Button();
+        $button->setValue($this->postBody->request->payload->value);
+
+        return $button;
     }
 
     public function getRequest()

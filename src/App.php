@@ -20,8 +20,8 @@ class App
 
         $mess = $skill->getSkillMessages();
 
-        if ( $request->isButtonPressed() ) {
-            $skill->processButton( $request->getButtonValue() );
+        if ($request->isButtonPressed()) {
+            $skill->processButton($request->getButton());
         } elseif ( $request->getCommand() ) {
             $skill->processCommand( $request->getCommand() );
         } else {

@@ -2,6 +2,7 @@
 namespace Azatnizam;
 
 use Azatnizam\ISkill;
+use Azatnizam\Button;
 
 /**
  * Class BaseSkill
@@ -36,16 +37,16 @@ class BaseSkill implements ISkill
         return json_encode($this->skill_response);
     }
 
-    public function setButton($value)
+    public function setButton(Button $button)
     {
-        $button = new \stdClass();
-        $button->payload = new \stdClass();
+        $skillButton = new \stdClass();
+        $skillButton->payload = new \stdClass();
 
-        $button->title = $value;
-        $button->hide = true;
-        $button->payload->value = $value;
+        $skillButton->hide = true;
+        $skillButton->title = $button->getTitle();
+        $skillButton->payload->value = $button->getValue();
 
-        $this->skill_response->response->buttons[] = $button;
+        $this->skill_response->response->buttons[] = $skillButton;
 
         return $this;
     }

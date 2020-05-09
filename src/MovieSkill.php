@@ -1,13 +1,13 @@
 <?php
 namespace Azatnizam;
 
-use Azatnizam\ISkill;
 use Azatnizam\BaseSkill;
+use Azatnizam\Button;
 use Symfony\Component\Yaml\Yaml;
-use GuzzleHttp\Client as HttpClient;
 
 class MovieSkill extends BaseSkill
 {
+    // TODO: delete from this file
     private const SECRET = '14a355e01638761caa047b29b68efb6f';
     private const FAV_MOVIES_COUNT = 5;
     private $mess;
@@ -28,9 +28,9 @@ class MovieSkill extends BaseSkill
         return $this->mess;
     }
 
-    public function processButton(string $button)
+    public function processButton(Button $button)
     {
-        switch ($button) {
+        switch ($button->getValue()) {
 
             case $this->mess['button.help']:
                 $this
@@ -65,42 +65,60 @@ class MovieSkill extends BaseSkill
                 break;
 
             default:
-                $this->user->incrMoviesCount();
-                /** Emulator for film add */
-                $this
-                    ->setButton($this->mess['button.getresult'])
-                    ->setButton($this->mess['button.help'])
-                    ->setText($this->mess['text.filmadded']);
-                break;
+                $movieId = (int) $button->getValue();
+                $api = new ApiClient();
+                $movies = $api->postPreference($this->user, (new Movie())->setId($movieId));
 
+                if ($movies->isEmpty() !== true) {
+                    $this->user->setMoviesCount(count($movies));
+                }
+
+                $this
+                    ->setButton(
+                        (new Button())
+                            ->setTitle($this->mess['button.getresult'])
+                            ->setValue($this->mess['button.getresult'])
+                    )
+                    ->setButton(
+                        (new Button())
+                            ->setTitle($this->mess['button.help'])
+                            ->setValue($this->mess['button.help'])
+                    );
+
+                if ($api->getStatus() === true) {
+                    $this->setText($this->mess['text.filmadded']);
+                } else {
+                    $this->setText($this->mess['text.error.add']);
+                }
+
+                break;
         }
 
     }
 
     public function processCommand(string $command)
     {
-        // TODO: move base_uri to config
-        $http = new HttpClient(['base_uri' => 'https://lyagusha.com']);
+        $api = new ApiClient();
+        $movies = $api->getList($command);
 
-        $expires = time();
-        $sign = hash_hmac('sha256', $expires, self::SECRET);
-        $url = '/movies/list/' . $command . '?' . http_build_query(['expires' => $expires, 'sign' => $sign]);
+        if ($api->getStatus() === true) {
+            foreach ($movies as $movie) {
+                $button = new Button();
+                $button
+                    ->setTitle($movie->getTitle())
+                    ->setValue($movie->getId());
 
-        $apiResponse = json_decode($http->get($url)->getBody());
-
-        if ($apiResponse->status === true) {
-            foreach ($apiResponse->movies as $movie) {
-                $this->setButton($movie->title);
+                $this->setButton($button);
             }
 
-            if (count($apiResponse->movies) > 0) {
+            if (count($movies) > 0) {
                 $this->setText($this->mess['text.choicefilm']);
             } else {
                 $this->setText($this->mess['text.filmnotfound']);
             }
         } else {
             $this
-                ->setButton($this->mess['button.help'])
+                ->setButton((new Button())->setTitle($this->mess['button.help']))
                 ->setText($this->mess['text.error.getlist']);
         }
     }
