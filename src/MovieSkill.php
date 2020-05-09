@@ -62,7 +62,11 @@ class MovieSkill extends BaseSkill
                     }
 
                     $this
-                        ->setButton($this->mess['button.help'])
+                        ->setButton(
+                            (new Button())
+                                ->setTitle($this->mess['button.help'])
+                                ->setValue($this->mess['button.help'])
+                        )
                         ->setText($text);
                 }
 
