@@ -34,7 +34,11 @@ class MovieSkill extends BaseSkill
 
             case $this->mess['button.help']:
                 $this
-                    ->setButton($this->mess['button.getresult'])
+                    ->setButton(
+                        (new Button())
+                            ->setTitle($this->mess['button.getresult'])
+                            ->setValue($this->mess['button.getresult'])
+                    )
                     ->setText($this->mess['text.help']);
                 break;
 
