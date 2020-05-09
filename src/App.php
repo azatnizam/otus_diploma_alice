@@ -27,8 +27,16 @@ class App
             $skill->processCommand($request->getCommand());
         } else {
             $skill
-                ->setButton($mess['button.help'])
-                ->setButton($mess['button.getresult'])
+                ->setButton(
+                    (new Button())
+                        ->setTitle($this->mess['button.help'])
+                        ->setValue($this->mess['button.help'])
+                )
+                ->setButton(
+                    (new Button())
+                        ->setTitle($this->mess['button.getresult'])
+                        ->setValue($this->mess['button.getresult'])
+                )
                 ->setText($mess['text.welcome']);
         }
 
