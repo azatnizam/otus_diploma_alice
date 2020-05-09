@@ -111,12 +111,11 @@ class MovieSkill extends BaseSkill
 
         if ($api->getStatus() === true) {
             foreach ($movies as $movie) {
-                $button = new Button();
-                $button
-                    ->setTitle($movie->getTitle())
-                    ->setValue($movie->getId());
-
-                $this->setButton($button);
+                $this->setButton(
+                    (new Button())
+                        ->setTitle($movie->getTitle())
+                        ->setValue($movie->getId())
+                );
             }
 
             if (count($movies) > 0) {
@@ -126,7 +125,11 @@ class MovieSkill extends BaseSkill
             }
         } else {
             $this
-                ->setButton((new Button())->setTitle($this->mess['button.help']))
+                ->setButton(
+                    (new Button())
+                        ->setTitle($this->mess['button.help'])
+                        ->setValue($this->mess['button.help'])
+                )
                 ->setText($this->mess['text.error.getlist']);
         }
     }
