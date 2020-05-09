@@ -19,25 +19,13 @@ class App
             return;
         }
 
-        $mess = $skill->getSkillMessages();
 
         if ($request->isButtonPressed()) {
             $skill->processButton($request->getButton());
         } elseif ($request->getCommand()) {
             $skill->processCommand($request->getCommand());
         } else {
-            $skill
-                ->setButton(
-                    (new Button())
-                        ->setTitle($this->mess['button.help'])
-                        ->setValue($this->mess['button.help'])
-                )
-                ->setButton(
-                    (new Button())
-                        ->setTitle($this->mess['button.getresult'])
-                        ->setValue($this->mess['button.getresult'])
-                )
-                ->setText($mess['text.welcome']);
+            $skill->processWelcome();
         }
 
         $skill->renderStep();

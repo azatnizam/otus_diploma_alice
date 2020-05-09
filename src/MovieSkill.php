@@ -20,12 +20,6 @@ class MovieSkill extends BaseSkill
         $this->user = $user;
     }
 
-
-    public function getSkillMessages(): array
-    {
-        return $this->mess;
-    }
-
     public function processButton(Button $button)
     {
         switch ($button->getValue()) {
@@ -150,6 +144,22 @@ class MovieSkill extends BaseSkill
                 )
                 ->setText($this->mess['text.error.getlist']);
         }
+    }
+
+    public function processWelcome()
+    {
+        $this
+            ->setButton(
+                (new Button())
+                    ->setTitle($this->mess['button.help'])
+                    ->setValue($this->mess['button.help'])
+            )
+            ->setButton(
+                (new Button())
+                    ->setTitle($this->mess['button.getresult'])
+                    ->setValue($this->mess['button.getresult'])
+            )
+            ->setText($this->mess['text.welcome']);
     }
 
     public function renderStep()
