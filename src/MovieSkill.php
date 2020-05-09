@@ -44,6 +44,7 @@ class MovieSkill extends BaseSkill
 
             case $this->mess['button.getresult']:
                 if ($this->user->getMoviesCount() >= self::FAV_MOVIES_COUNT) {
+
                     /** Emulator for recommendations */
                     $text = $this->mess['text.recommendation'] . "\n\nFilm\nFilm2\nFilm3";
                     $this

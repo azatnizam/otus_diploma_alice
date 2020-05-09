@@ -1,9 +1,10 @@
 <?php
 namespace Azatnizam;
 
-use \Azatnizam\AliceRequest,
-    \Azatnizam\MovieSkill,
-    \Symfony\Component\Yaml\Yaml;
+use Azatnizam\AliceRequest;
+use Azatnizam\MovieSkill;
+use Azatnizam\Button;
+use Symfony\Component\Yaml\Yaml;
 
 class App
 {
@@ -13,7 +14,7 @@ class App
         $user = new User($request->getUserId());
         $skill = new MovieSkill($user);
 
-        if ( !$request->getRequest() ) {
+        if (!$request->getRequest()) {
             header('HTTP/1.1 415 Unsupported request data');
             return;
         }
@@ -22,8 +23,8 @@ class App
 
         if ($request->isButtonPressed()) {
             $skill->processButton($request->getButton());
-        } elseif ( $request->getCommand() ) {
-            $skill->processCommand( $request->getCommand() );
+        } elseif ($request->getCommand()) {
+            $skill->processCommand($request->getCommand());
         } else {
             $skill
                 ->setButton($mess['button.help'])
