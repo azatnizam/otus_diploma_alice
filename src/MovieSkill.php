@@ -106,6 +106,9 @@ class MovieSkill extends BaseSkill
                     );
 
                 if ($api->getStatus() === true) {
+                    // Clear user local cache
+                    $this->user->setMoviesCount(0);
+
                     $this->setText($this->mess['text.clearok']);
                 } else {
                     $this->setText($this->mess['text.error.clear']);
