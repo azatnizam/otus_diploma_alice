@@ -32,6 +32,16 @@ class MovieSkill extends BaseSkill
                             ->setValue($this->mess['button.getresult'])
                     )
                     ->setText($this->mess['text.help']);
+
+                if ($this->user->getMoviesCount() > 0) {
+                    $this
+                        ->setButton(
+                            (new Button())
+                                ->setTitle($this->mess['button.clear'])
+                                ->setValue($this->mess['button.clear'])
+                        );
+                }
+
                 break;
 
             case $this->mess['button.getresult']:
@@ -42,8 +52,8 @@ class MovieSkill extends BaseSkill
                     $this
                         ->setButton(
                             (new Button())
-                                ->setTitle($this->mess['button.getresult'])
-                                ->setValue($this->mess['button.getresult'])
+                                ->setTitle($this->mess['button.clear'])
+                                ->setValue($this->mess['button.clear'])
                         )
                         ->setButton(
                             (new Button())
@@ -84,6 +94,10 @@ class MovieSkill extends BaseSkill
 
                 break;
 
+            case $this->mess['button.clear']:
+                //
+                break;
+
             default:
                 $movieId = (int) $button->getValue();
                 $api = new ApiClient();
@@ -98,6 +112,11 @@ class MovieSkill extends BaseSkill
                         (new Button())
                             ->setTitle($this->mess['button.getresult'])
                             ->setValue($this->mess['button.getresult'])
+                    )
+                    ->setButton(
+                        (new Button())
+                            ->setTitle($this->mess['button.clear'])
+                            ->setValue($this->mess['button.clear'])
                     )
                     ->setButton(
                         (new Button())
@@ -160,6 +179,15 @@ class MovieSkill extends BaseSkill
                     ->setValue($this->mess['button.getresult'])
             )
             ->setText($this->mess['text.welcome']);
+
+        if ($this->user->getMoviesCount() > 0) {
+            $this
+                ->setButton(
+                    (new Button())
+                        ->setTitle($this->mess['button.clear'])
+                        ->setValue($this->mess['button.clear'])
+                );
+        }
     }
 
     public function renderStep()

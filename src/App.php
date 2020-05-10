@@ -19,7 +19,6 @@ class App
             return;
         }
 
-
         if ($request->isButtonPressed()) {
             $skill->processButton($request->getButton());
         } elseif ($request->getCommand()) {

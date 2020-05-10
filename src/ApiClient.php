@@ -13,6 +13,7 @@ final class ApiClient
     private const LIST_URL = '/movies/list/';
     private const POST_PREFERENCE_URL = '/movies/preference';
     private const RECOMMENDATIONS_URL = '/movies/user/%s/recommendations';
+    private const CLEAR_URL = '/movies/preference';
     private $httpClient;
     private $status;
     private $url;
@@ -108,6 +109,17 @@ final class ApiClient
         }
 
         return $list;
+    }
+
+    public function clearPreferences(User $user): void
+    {
+        $this->status = false;
+        $this->prepare(self::CLEAR_URL);
+        $deleteBody = new \stdClass();
+        $deleteBody->user_id = $user->getId();
+        $apiResponse = json_decode($this->httpClient->delete($this->url, ['body' => json_encode($deleteBody)])->getBody());
+
+        $this->status = $apiResponse->status;
     }
 
     /**
