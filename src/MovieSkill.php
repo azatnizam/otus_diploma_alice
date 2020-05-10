@@ -95,7 +95,22 @@ class MovieSkill extends BaseSkill
                 break;
 
             case $this->mess['button.clear']:
-                //
+                $api = new ApiClient();
+                $api->clearPreferences($this->user);
+
+                $this
+                    ->setButton(
+                        (new Button())
+                            ->setTitle($this->mess['button.help'])
+                            ->setValue($this->mess['button.help'])
+                    );
+
+                if ($api->getStatus() === true) {
+                    $this->setText($this->mess['text.clearok']);
+                } else {
+                    $this->setText($this->mess['text.error.clear']);
+                }
+
                 break;
 
             default:
